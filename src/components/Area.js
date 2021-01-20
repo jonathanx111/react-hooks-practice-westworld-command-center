@@ -1,30 +1,49 @@
 import React from "react";
 import "../stylesheets/Area.css";
+import HostList from "./HostList";
 
-function Area() {
+function Area({ hosts, area, isSelected, setIsSelected, setValue}) {
+  const { id, name, limit, auth_req } = area
+  
+  function cleanUpName(name) {
+    let cleanedName = name
+    
+    if (name.split("").includes("_") ) {
+      let nameArray = name.split("_")
+      nameArray[0]=nameArray[0].charAt(0).toUpperCase() + nameArray[0].slice(1)
+      nameArray[1]=nameArray[1].charAt(0).toUpperCase() + nameArray[1].slice(1)
+      cleanedName = nameArray.join(" ")
+    } else {
+      cleanedName = name.charAt(0).toUpperCase() + name.slice(1)
+    }
+    return cleanedName
+  }
+  
+  
   return (
     <div
       className="area"
       id={
-        /* Pass in the area name here to make sure this is styled correctly */ "id"
+        name
       }
     >
       <h3 className="labels">
-        {/* Don't just pass in the name from the data...clean that thing up */}
+        {cleanUpName(name)}
       </h3>
-      {/* See Checkpoint 1 item 2 in the Readme for a clue as to what goes here */}
+      <HostList hosts={hosts} fromArea={area} isSelected={isSelected} setIsSelected={setIsSelected} setValue={setValue} />
     </div>
   );
 }
 
-Area.propTypes = {
-  hosts: function (props) {
-    if (props.hosts.length > props.limit) {
-      throw Error(
-        `HEY!! You got too many hosts in ${props.name}. The limit for that area is ${props.limit}. You gotta fix that!`
-      );
-    }
-  },
-};
+// Area.propTypes = {
+//   hosts: function (props) {
+//     console.log(props)
+//     if (props.hosts.length > props.area.limit) {
+//       throw Error(
+//         `HEY!! You got too many hosts in ${props.name}. The limit for that area is ${props.limit}. You gotta fix that!`
+//       );
+//     }
+//   },
+// };
 
 export default Area;
